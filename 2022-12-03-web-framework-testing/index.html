@@ -1,0 +1,587 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Web Framework Testing</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/softwaredesign-solution.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+
+		<style>
+
+		</style>
+
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section>
+					<h3>Web Framework Testing</h3>
+					<h4>mit Vue.js, Jest (Vitest) & Cypress</h4>
+				</section>
+
+				<section>
+					<h4>Über mich</h4>
+					<div class="grid grid-cols-2">
+						<div>
+							<img src="images/manuel_kuebler.jpeg" />
+						</div>
+						<div>
+							<ul>
+								<li><strong>Manuel Kübler, B.Sc.</strong></li>
+								<li>Full-Stack-Entwickler</li>
+								<li>Studium AI Master (2. Semester)</li>
+								<li>Ehrenamt:
+									<ul>
+										<li>Fachschaft I & N</li>
+										<li>Studienbeirat I & N</li>
+									</ul>
+								</li>
+								<li>Kontakt:
+									<ul>
+										<li>kuebler.manuel@fh-swf.de</li></li>
+										<li>github.com/softwaredesign-solution</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<h4>Agenda</h4>
+					<ol>
+						<li class="fragment">Grundlagen</li>
+						<li class="fragment">Unit Tests</li>
+						<li class="fragment">Einführung in Cypress</li>
+						<li class="fragment">Integration & Component Tests</li>
+						<li class="fragment">End-to-End (E2E) Tests</li>
+					</ol>
+				</section>
+
+				<section>
+					<h4>Grundlagen</h4>
+				</section>
+
+				<section>
+					<section>
+						<h4>Warum sollte man Tests schreiben?</h4>
+						<ul>
+							<li>Tests stellen sicher, was heute funktioniert wird auch morgen funktionieren</li>
+							<li>Tests sorgen langfristig für Stabilität & hohe Qualität</li>
+							<li>Manuelle Tests testen nur den Happy-Path, aber nicht die Fehler- & Sonderfälle, Edge cases</li>
+						</ul>
+					</section>
+					<section>
+						<img src="images/testturm.png" />
+						<small>(Quelle: Vertiefung Software Engineering LE4 S.32, Prof. Dr. Doga Arinir)</small>
+					</section>
+				</section>
+
+				<section>
+					<h4>Welche Tests gibt es?</h4>
+					<img src="images/testing_pyramide.png" />
+					<small>(Quelle: Angular Testing Workshop, Rainer Hahnekamp)</small>
+				</section>
+
+				<section>
+					<h4>Wie ist ein Test aufgebaut?</h4>
+					<table>
+						<thead>
+							<tr>
+								<th>Funktion</th>
+								<th>Beschreibung</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>describe()</td>
+								<td>Definiert eine Sammlung von Tests</td>
+							</tr>
+							<tr>
+								<td>beforeAll()</td>
+								<td>Wird nur einmal vor allen Tests ausgeführt</td>
+							</tr>
+							<tr>
+								<td>beforeEach()</td>
+								<td>Wird vor jedem Test ausgeführt</td>
+							</tr>
+							<tr>
+								<td>it() bzw. test()</td>
+								<td>Der eigentliche Test</td>
+							</tr>
+							<tr>
+								<td>expect()</td>
+								<td>Wertet in Verbindung mit einem Matcher (z.B. toBe()) das Ergebnis aus</td>
+							</tr>
+							<tr>
+								<td>afterEach()</td>
+								<td>Wird nach jedem Test ausgeführt</td>
+							</tr>
+							<tr>
+								<td>afterAll()</td>
+								<td>Wird nur einmal nach allen Tests ausgeführt</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section>
+					<h4>Reihenfolge</h4>
+					<div class="grid grid-cols-2">
+						<div>
+							<pre style="width: 600px; height: 415px">
+								<code class="language-TypeScript" style="padding-top: 20px; padding-bottom: 20px;">
+									<script type="text/template">describe('Tests', () => {
+	beforeAll(() => console.log('1 - beforeAll'));
+	afterAll(() => console.log('1 - afterAll'));
+	beforeEach(() => console.log('1 - beforeEach'));
+	afterEach(() => console.log('1 - afterEach'));
+
+	test('', () => console.log('1 - test'));
+
+	describe('Scoped / Nested block', () => {
+		beforeAll(() => console.log('2 - beforeAll'));
+		afterAll(() => console.log('2 - afterAll'));
+		beforeEach(() => console.log('2 - beforeEach'));
+		afterEach(() => console.log('2 - afterEach'));
+
+		test('', () => console.log('2 - test'));
+	});
+});</script>
+								</code>
+							</pre>
+						</div>
+						<div>
+							<ol>
+								<li>1 - beforeAll</li>
+								<li>1 - beforeEach</li>
+								<li>1 - test</li>
+								<li>1 - afterEach</li>
+								<li>2 - beforeAll</li>
+								<li>1 - beforeEach</li>
+								<li>2 - beforeEach</li>
+								<li>2 - test</li>
+								<li>2 - afterEach</li>
+								<li>1 - afterEach</li>
+								<li>2 - afterAll</li>
+								<li>1 - afterAll</li>
+							</ol>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<h4>AAA-Pattern</h4>
+					<ul>
+						<li>Industrie-Standard</li>
+						<li>
+							Aufbau:
+							<ul>
+								<li>Arrange = Die Umgebung vorbereiten</li>
+								<li>Act = Die zu testende Aktion ausführen</li>
+								<li>Assert = Ergebnis auswerten</li>
+							</ul>
+						</li>
+						<li>Ausnahmen:
+							<ul>
+								<li>Die zu testende Funktion liefert eine Exception</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h4>Ergebnis auswerten</h4>
+					<table>
+						<thead>
+							<tr>
+								<th>Matcher</th>
+								<th>Beschreibung</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>toBe</td>
+								<td>Ergebnis mit dem übergebenen Wert übereinstimmt</td>
+							</tr>
+							<tr>
+								<td>toEqual</td>
+								<td>Prüft, ob die beiden Strukturen übereinstimmen</td>
+							</tr>
+							<tr>
+								<td>toBeTruthy/toBeFalsy</td>
+								<td>Prüft, ob das Ergebnis true bzw. false ist</td>
+							</tr>
+							<tr>
+								<td>toBeDefined/toBeUndefined/toBeNull</td>
+								<td>Prüft, ob das Ergebnis undefined bzw. null ist</td>
+							</tr>
+							<tr>
+								<td>toThrow/toThrowError</td>
+								<td>Prüft, ob die zu testende Aktion ein Fehler geworfen hat</td>
+							</tr>
+						</tbody>
+					</table>
+					<small>(Quelle: https://jestjs.io/docs/expect)</small>
+				</section>
+
+				<section>
+					<section>
+						<h4>Unit Tests</h4>
+						<ul>
+							<li>Testet Funktionen/Services</li>
+							<li>Äußere Abhängigkeiten werden gemockt</li>
+							<li>Dateiendung: spec.ts</li>
+						</ul>
+					</section>
+					<section>
+						<h4>Mocking von Abhängigkeiten</h4>
+						<pre style="height: 525px">
+							<code class="language-TypeScript" data-line-numbers="1|3-15|3,17|19-20|22-24">
+								<script type="text/template">vi.mock('axios');
+
+// Arrange
+const mockedAxios = vi.mocked(axios.get).mockResolvedValue({
+	data: [
+		{
+			id: 'Aufgabe_1',
+			name: 'Aufgabe 1',
+			description: 'Dies ist eine Aufgabenbeschreibung',
+			completed: true
+		}
+	],
+	status: 200,
+	statusText: 'OK'
+});
+
+const taskService: TaskService = new TaskService();
+
+// Act
+const tasks: Task[] = await taskService.getTasks();
+
+// Assert
+expect(tasks.length).toBe(1);
+expect(tasks[0].name).toBe('Aufgabe 1');
+
+vi.resetAllMocks();</script>
+							</code>
+						</pre>
+					</section>
+				</section>
+
+				<section>
+					<h4>Einführung in Cypress</h4>
+				</section>
+
+				<section>
+					<h4>Was ist überhaupt Cypress?</h4>
+					<ul>
+						<li>Frontend Testing Framework der nächsten Generation</li>
+						<li>Open-Source-Community-Projekt</li>
+						<li>
+							Fast, easy and reliable testing for anything that runs in a browser
+							<br/>
+							<small>(Quelle: cypress.io)</small>
+						</li>
+						<li>Cypress wartet selbstständig bis der gewünschte Zustand eingetreten ist</li>
+						<li>Screenshots & Video-Recordings</li>
+						<li>Dateiendung: cy.ts</li>
+						<li>Frontend-Framework: Angular, Next, Nuxt, React, Svelte, Vue</li>
+						<li>Bundler: Vite, Webpack</li>
+					</ul>
+				</section>
+
+				<section>
+					<section>
+						<h4>Cypress installieren & konfigurieren</h4>
+						<p>
+							<code style="background: #dee; padding: 5px 15px; border-radius:4px;">
+								npm install cypress --save-dev
+							</code>
+						</p>
+						<p>
+							<code style="background: #dee; padding: 5px 15px; border-radius:4px;">
+								npx cypress open
+							</code>
+						</p>
+					</section>
+					<section>
+						<img style="width: 80%; height: 80%;" src="images/1-welcome-to-cypress.png" />
+					</section>
+				</section>
+
+				<section>
+					<h4>Grundlegende Funktionen von Cypress</h4>
+					<table>
+						<thead>
+							<tr>
+								<th>Funktion</th>
+								<th>Beschreibung</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>visit</td>
+								<td>Aufruf der übergenen URL</td>
+							</tr>
+							<tr>
+								<td>get</td>
+								<td>auf DOM-Elemente zugreifen</td>
+							</tr>
+							<tr>
+								<td>find</td>
+								<td>Ähnlich wie get, kann in der Chain mit anderen Funktionen verwendet werden</td>
+							</tr>
+							<tr>
+								<td>click/type</td>
+								<td>Interaktion mit DOM-Elementen</td>
+							</tr>
+							<tr>
+								<td>submit</td>
+								<td>Löst das submit-Funktion einer Form aus</td>
+							</tr>
+							<tr>
+								<td>should</td>
+								<td>Ergebnis auswerten</td>
+							</tr>
+							<tr>
+								<td>screenshot</td>
+								<td>Erstellt einen Screenshot</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section>
+					<section>
+						<h4>Mocking von HTTP-Requests</h4>
+						<ul>
+							<li>Manipulation von bestimmten HTTP-Anfragen</li>
+							<li>Elegante Lösung um Edge Cases zu testen</li>
+							<li>HTTP-Antworten können mit fixture-Dateien manipuliert werden</li>
+						</ul>
+					</section>
+					<section>
+						<h4>tasks.json</h4>
+						<pre>
+							<code class="language-json">
+								<script type="text/template">[
+	{
+		"id": "Aufgabe_1",
+		"name": "Aufgabe 1",
+		"description": "Dies ist eine Aufgabenbeschreibung",
+		"completed": true
+	},
+	{
+		"id": "Aufgabe_2",
+		"name": "Aufgabe 2",
+		"description": "Dies ist eine Aufgabenbeschreibung",
+		"completed": false
+	}
+]</script>
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h4>Code-Beispiel</h4>
+						<pre>
+							<code class="language-TypeScript" data-line-numbers="1-2|4-5">
+								<script type="text/template">// Liefert eine leere Liste zurück
+cy.intercept('GET', 'http://localhost:3000/tasks', []).as('tasks');
+
+// Liefert das Ergebnis aus der fixture-Datei tasks.json zurück
+cy.intercept('GET', 'http://localhost:3000/tasks', { fixture: 'tasks.json' }).as('tasks');</script>
+							</code>
+						</pre>
+					</section>
+				</section>
+
+
+				<section>
+					<section>
+						<h4>Integration & Component Tests</h4>
+						<ul>
+							<li>
+								Integration Tests:
+								<ul>
+									<li>Zusammenschluss von mehreren Unit Tests</li>
+									<li>HTTP-Requests werden gemockt</li>
+								</ul>
+							</li>
+							<li>Component Tests:
+								<ul>
+									<li>Komponente wird einer geschlossenen Umgebung getestet</li>
+									<li>Abhängigkeiten (HTTP-Requests) werden gemockt</li>
+									<li>Werte werden über Parameter übergeben</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+					<section>
+						<img style="width: 80%; height: 80%;" src="images/3-component-testing-project-setup.png" />
+					</section>
+					<section>
+						<img style="width: 80%; height: 80%;" src="images/3-1-component-testing-install-dev-dependencies.png" />
+					</section>
+					<section>
+						<img style="width: 80%; height: 80%;" src="images/3-2-component-testing-configuration-files.png" />
+					</section>
+					<section>
+						<img style="width: 80%; height: 80%;" src="images/3-3-component-testing-choose-a-browser.png" />
+					</section>
+					<section>
+						<img src="images/3-4-component-testing-specs.png" />
+					</section>
+					<section>
+						<h4>Beispiel</h4>
+						<img src="images/newtaskmodal.png" />
+					</section>
+					<section>
+						<h4>Code-Beispiel</h4>
+						<pre style="height: 600px">
+							<code class="language-TypeScript" data-line-numbers="1,16|14,17-19|22,24|26|8-12,14,18,28">
+								<script type="text/template">import EditTaskModal from './EditTaskModal.vue';
+import type Task from "@/models/Task";
+
+describe('EditTaskModal', () => {
+
+	it('mounted', () => {
+
+		const task: Task = {
+			id: 'Hello World!',
+			name: 'Hello World!',
+			description: 'This task is created with Cypress'
+		};
+
+		const onSaveTaskSpy = cy.spy().as('onSaveTaskSpy');
+
+		cy.mount(EditTaskModal, {
+			props: {
+				onSaveTask: onSaveTaskSpy
+			}
+		});
+
+		cy.get('#name').type('Hello World!');
+
+		cy.get('#description').type('This task is created with Cypress');
+
+		cy.get('form').submit();
+
+		cy.get('@onSaveTaskSpy').should('have.been.calledWith', task);
+
+	})
+})</script>
+							</code>
+						</pre>
+					</section>
+					<section>
+						<img style="width: 85%; height: 85%;" src="images/3-5-component-testing-edittaskmodal.png" />
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h4>End-to-End (E2E) Tests</h4>
+						<ul>
+							<li>Gesamte Anwendung wird getestet</li>
+							<li>Reale HTTP-Requests, können aber auch gemockt werden</li>
+							<li>Die Anwendung muss gestartet sein</li>
+						</ul>
+					</section>
+					<section>
+						<img style="width: 80%; height: 80%;" src="images/2-1-e2e-testing-configuration-files.png" />
+					</section>
+					<section>
+						<img style="width: 80%; height: 80%;" src="images/2-2-e2e-testing-choose-a-browser.png" />
+					</section>
+					<section>
+						<img src="images/2-3-e2e-testing-specs.png" />
+					</section>
+					<section>
+						<h4>Beispiel</h4>
+						<img src="images/web-framework-testing.png" />
+					</section>
+					<section>
+						<h4>Code-Beispiel</h4>
+						<pre>
+							<code class="language-TypeScript" data-line-numbers="5-6|8,9|11,12|14,16|18,19|21,22|24-28|30,31">
+								<script type="text/template">describe('e2e', () => {
+
+	it ('test', () => {
+
+		// Webanwendung aufrufen
+		cy.visit('/');
+
+		// Prüfen, ob die Webanwendung vollständig geladen wurde
+		cy.contains('h2.app-title', 'web-framework-testing');
+
+		// Schaltfläche "Neue Aufgabe" klicken
+		cy.get('#newTask').click();
+
+		// Formular befüllen
+		cy.get('#name').type('Hello World!');
+		cy.get('#description').type('This task is created with Cypress');
+
+		// Formular abschicken
+		cy.get('form').submit();
+
+		// Prüfen, ob die neue Aufgabe mit der eingegebenen Beschreibung in der Liste erscheint
+		cy.get('p').contains('This task is created with Cypress').should('have.text', 'This task is created with Cypress');
+
+		// Bei Aufgabe 2 das Kontextmenü öffnen und den Menüpunkt löschen anklicken
+		cy.get('#aufgabe_2').then((element) => {
+            cy.wrap(element).find('button.menu-options').click();
+            cy.wrap(element).find('a.deleteTask').click();
+		});
+
+		// Prüfen, ob die Aufgabe gelöscht wurde
+		cy.get('#aufgabe_2').should('not.exist');
+
+	});
+
+})</script>
+							</code>
+						</pre>
+					</section>
+					<section>
+						<img style="width: 85%; height: 85%;" src="images/2-4-e2e-testing-e2e.png" />
+					</section>
+				</section>
+
+				<section data-background-image="images/code-background.jpg">
+					<h1 style="color: white;">Demo</h1>
+				</section>
+
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				width: 1200,
+				//height: 700,
+
+				slideNumber: 'h/v',
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
