@@ -6,12 +6,12 @@
 
 		<title>Web Framework Testing</title>
 
-		<link rel="stylesheet" href="../../../../Backup/2022-12-01-testing-cypress/dist/reset.css">
-		<link rel="stylesheet" href="../../../../Backup/2022-12-01-testing-cypress/dist/reveal.css">
-		<link rel="stylesheet" href="../../../../Backup/2022-12-01-testing-cypress/dist/theme/softwaredesign-solution.css">
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/softwaredesign-solution.css">
 
 		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="../../../../Backup/2022-12-01-testing-cypress/plugin/highlight/monokai.css">
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
 
 		<style>
 
@@ -31,7 +31,7 @@
 					<h4>Über mich</h4>
 					<div class="grid grid-cols-2">
 						<div>
-							<img src="../../../../Backup/2022-12-01-testing-cypress/images/manuel_kuebler.jpeg" />
+							<img src="images/manuel_kuebler.jpeg" />
 						</div>
 						<div>
 							<ul>
@@ -81,14 +81,14 @@
 						</ul>
 					</section>
 					<section>
-						<img src="../../../../Backup/2022-12-01-testing-cypress/images/testturm.png" />
+						<img src="images/testturm.png" />
 						<small>(Quelle: Vertiefung Software Engineering LE4 S.32, Prof. Dr. Doga Arinir)</small>
 					</section>
 				</section>
 
 				<section>
 					<h4>Welche Tests gibt es?</h4>
-					<img src="../../../../Backup/2022-12-01-testing-cypress/images/testing_pyramide.png" />
+					<img src="images/testing_pyramide.png" />
 					<small>(Quelle: Angular Testing Workshop, Rainer Hahnekamp)</small>
 				</section>
 
@@ -315,7 +315,7 @@ vi.resetAllMocks();</script>
 						</p>
 					</section>
 					<section>
-						<img style="width: 80%; height: 80%;" src="../../../../Backup/2022-12-01-testing-cypress/images/1-welcome-to-cypress.png" />
+						<img style="width: 80%; height: 80%;" src="images/1-welcome-to-cypress.png" />
 					</section>
 				</section>
 
@@ -427,23 +427,23 @@ cy.intercept('GET', 'http://localhost:3000/tasks', { fixture: 'tasks.json' }).as
 						</ul>
 					</section>
 					<section>
-						<img style="width: 80%; height: 80%;" src="../../../../Backup/2022-12-01-testing-cypress/images/3-component-testing-project-setup.png" />
+						<img style="width: 80%; height: 80%;" src="images/3-component-testing-project-setup.png" />
 					</section>
 					<section>
-						<img style="width: 80%; height: 80%;" src="../../../../Backup/2022-12-01-testing-cypress/images/3-1-component-testing-install-dev-dependencies.png" />
+						<img style="width: 80%; height: 80%;" src="images/3-1-component-testing-install-dev-dependencies.png" />
 					</section>
 					<section>
-						<img style="width: 80%; height: 80%;" src="../../../../Backup/2022-12-01-testing-cypress/images/3-2-component-testing-configuration-files.png" />
+						<img style="width: 80%; height: 80%;" src="images/3-2-component-testing-configuration-files.png" />
 					</section>
 					<section>
-						<img style="width: 80%; height: 80%;" src="../../../../Backup/2022-12-01-testing-cypress/images/3-3-component-testing-choose-a-browser.png" />
+						<img style="width: 80%; height: 80%;" src="images/3-3-component-testing-choose-a-browser.png" />
 					</section>
 					<section>
-						<img src="../../../../Backup/2022-12-01-testing-cypress/images/3-4-component-testing-specs.png" />
+						<img src="images/3-4-component-testing-specs.png" />
 					</section>
 					<section>
 						<h4>Beispiel</h4>
-						<img src="../../../../Backup/2022-12-01-testing-cypress/images/newtaskmodal.png" />
+						<img src="images/newtaskmodal.png" />
 					</section>
 					<section>
 						<h4>Code-Beispiel</h4>
@@ -484,7 +484,7 @@ describe('EditTaskModal', () => {
 						</pre>
 					</section>
 					<section>
-						<img style="width: 85%; height: 85%;" src="../../../../Backup/2022-12-01-testing-cypress/images/3-5-component-testing-edittaskmodal.png" />
+						<img style="width: 85%; height: 85%;" src="images/3-5-component-testing-edittaskmodal.png" />
 					</section>
 				</section>
 
@@ -498,17 +498,17 @@ describe('EditTaskModal', () => {
 						</ul>
 					</section>
 					<section>
-						<img style="width: 80%; height: 80%;" src="../../../../Backup/2022-12-01-testing-cypress/images/2-1-e2e-testing-configuration-files.png" />
+						<img style="width: 80%; height: 80%;" src="images/2-1-e2e-testing-configuration-files.png" />
 					</section>
 					<section>
-						<img style="width: 80%; height: 80%;" src="../../../../Backup/2022-12-01-testing-cypress/images/2-2-e2e-testing-choose-a-browser.png" />
+						<img style="width: 80%; height: 80%;" src="images/2-2-e2e-testing-choose-a-browser.png" />
 					</section>
 					<section>
-						<img src="../../../../Backup/2022-12-01-testing-cypress/images/2-3-e2e-testing-specs.png" />
+						<img src="images/2-3-e2e-testing-specs.png" />
 					</section>
 					<section>
 						<h4>Beispiel</h4>
-						<img src="../../../../Backup/2022-12-01-testing-cypress/images/web-framework-testing.png" />
+						<img src="images/web-framework-testing.png" />
 					</section>
 					<section>
 						<h4>Code-Beispiel</h4>
@@ -553,7 +553,7 @@ describe('EditTaskModal', () => {
 						</pre>
 					</section>
 					<section>
-						<img style="width: 85%; height: 85%;" src="../../../../Backup/2022-12-01-testing-cypress/images/2-4-e2e-testing-e2e.png" />
+						<img style="width: 85%; height: 85%;" src="images/2-4-e2e-testing-e2e.png" />
 					</section>
 				</section>
 
@@ -564,10 +564,10 @@ describe('EditTaskModal', () => {
 			</div>
 		</div>
 
-		<script src="../../../../Backup/2022-12-01-testing-cypress/dist/reveal.js"></script>
-		<script src="../../../../Backup/2022-12-01-testing-cypress/plugin/notes/notes.js"></script>
-		<script src="../../../../Backup/2022-12-01-testing-cypress/plugin/markdown/markdown.js"></script>
-		<script src="../../../../Backup/2022-12-01-testing-cypress/plugin/highlight/highlight.js"></script>
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
 		<script>
 			// More info about initialization & config:
 			// - https://revealjs.com/initialization/
